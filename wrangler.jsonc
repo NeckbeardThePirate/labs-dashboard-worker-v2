@@ -10,7 +10,8 @@
 		{
 			"database_id": "7cba00a9-b074-4db5-82f6-d9688b35f025",
 			"binding": "DB",
-			"database_name": "light_labs"
+			"database_name": "light_labs",
+			"experimental_remote": true
 		}
 	]
 }
