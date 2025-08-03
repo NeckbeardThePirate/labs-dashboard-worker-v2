@@ -1,5 +1,17 @@
-import type { ENV } from '../types/index.ts'
+import type {
+	ChatDefaultUpdateRequest,
+	DeliveryPausedUpdateRequest,
+	ENV,
+	NewsDeliveryTimeUpdateReques,
+	SaveChatUpdateRequest,
+} from '../types/index.ts';
 import getUserData from './modules/users/getUserData.js';
+import updateDefaultChatMode from './modules/users/updateDefaultChatMode.js';
+import updateNewsDeliveryPausedSetting from './modules/users/updateNewsDeliveryPausedSetting.js';
+import updateNewsDeliveryTime from './modules/users/updateNewsDeliveryTime.js';
+import updateSaveChatSetting from './modules/users/updateSaveChatSetting.js';
+import updateWeatherDeliveryPausedSetting from './modules/users/updateWeatherDeliveryPausedSetting.js';
+import updateWeatherDeliveryTime from './modules/users/updateWeatherDeliveryTime.js';
 export default {
 	async fetch(request: Request, env: ENV, ctx: ExecutionContext): Promise<Response | void> {
 		const response = await handleRequest(request, env, ctx);
@@ -63,44 +75,227 @@ async function handleRequest(request: Request, env: ENV, ctx: ExecutionContext):
 			}
 		}
 
-		// if (request.method === 'POST') {
-		// 	if (pathname === '/tech/create-group') {
-		// 		try {
-		// 			const isAuthorized = true;
+		if (request.method === 'POST') {
+			if (pathname === '/u/update-chat-default') {
+				try {
+					const isAuthorized = true;
 
-		// 			const { orgSlug, groupName, groupUsers } = (await request.json()) as GroupCreationRequestProperties;
+					const { userId, newDefault } = (await request.json()) as ChatDefaultUpdateRequest;
 
-		// 			if (orgSlug === null || groupName === null || groupUsers === null) {
-		// 				return new Response(JSON.stringify({ error: 'cannot have null props' }), {
-		// 					status: 500,
-		// 					headers: defaultHeaders,
-		// 				});
-		// 			}
+					if (userId === null || userId === '' || newDefault === null) {
+						return new Response(JSON.stringify({ error: 'cannot have null props' }), {
+							status: 500,
+							headers: defaultHeaders,
+						});
+					}
 
-		// 			if (isAuthorized) {
-		// 				const cloudGroupCreationSuccess = await createCloudGroup(env, orgSlug, groupName, groupUsers);
+					if (isAuthorized) {
+						console.log(userId, newDefault);
+						const updateDefaultChatModeSuccess = await updateDefaultChatMode(env, userId, newDefault);
 
-		// 				if (cloudGroupCreationSuccess === false) {
-		// 					console.log('failed to create cloud group');
-		// 					return new Response(JSON.stringify({ success: false }), {
-		// 						status: 500,
-		// 						headers: defaultHeaders,
-		// 					});
-		// 				}
+						if (updateDefaultChatModeSuccess instanceof Error) {
+							console.log('failed to update chat defaults');
+							return new Response(JSON.stringify({ success: false }), {
+								status: 500,
+								headers: defaultHeaders,
+							});
+						}
 
-		// 				return new Response(JSON.stringify({ success: true }), {
-		// 					status: 200,
-		// 					headers: defaultHeaders,
-		// 				});
-		// 			}
-		// 		} catch (error) {
-		// 			return new Response(JSON.stringify({ error }), {
-		// 				status: 500,
-		// 				headers: defaultHeaders,
-		// 			});
-		// 		}
-		// 	}
-		// }
+						return new Response(JSON.stringify({ success: true }), {
+							status: 200,
+							headers: defaultHeaders,
+						});
+					}
+				} catch (error) {
+					return new Response(JSON.stringify({ error }), {
+						status: 500,
+						headers: defaultHeaders,
+					});
+				}
+			}
+			if (pathname === '/u/update-save-chat') {
+				try {
+					const isAuthorized = true;
+
+					const { userId, saveChats } = (await request.json()) as SaveChatUpdateRequest;
+
+					if (userId === null || userId === '' || saveChats === null) {
+						return new Response(JSON.stringify({ error: 'cannot have null props' }), {
+							status: 500,
+							headers: defaultHeaders,
+						});
+					}
+
+					if (isAuthorized) {
+						console.log(userId, saveChats);
+						const updateSaveChatSuccess = await updateSaveChatSetting(env, userId, saveChats);
+
+						if (updateSaveChatSuccess instanceof Error) {
+							console.log('failed to update chat defaults');
+							return new Response(JSON.stringify({ success: false }), {
+								status: 500,
+								headers: defaultHeaders,
+							});
+						}
+
+						return new Response(JSON.stringify({ success: true }), {
+							status: 200,
+							headers: defaultHeaders,
+						});
+					}
+				} catch (error) {
+					return new Response(JSON.stringify({ error }), {
+						status: 500,
+						headers: defaultHeaders,
+					});
+				}
+			}
+			if (pathname === '/u/update-news-delivery-hour') {
+				try {
+					const isAuthorized = true;
+
+					const { userId, newHour } = (await request.json()) as NewsDeliveryTimeUpdateReques;
+
+					if (userId === null || userId === '' || newHour === null) {
+						return new Response(JSON.stringify({ error: 'cannot have null props' }), {
+							status: 500,
+							headers: defaultHeaders,
+						});
+					}
+
+					if (isAuthorized) {
+						const updateNewsDeliveryTimeSuccess = await updateNewsDeliveryTime(env, userId, newHour);
+
+						if (updateNewsDeliveryTimeSuccess instanceof Error) {
+							console.log('failed to update chat defaults');
+							return new Response(JSON.stringify({ success: false }), {
+								status: 500,
+								headers: defaultHeaders,
+							});
+						}
+
+						return new Response(JSON.stringify({ success: true }), {
+							status: 200,
+							headers: defaultHeaders,
+						});
+					}
+				} catch (error) {
+					return new Response(JSON.stringify({ error }), {
+						status: 500,
+						headers: defaultHeaders,
+					});
+				}
+			}
+
+			if (pathname === '/u/update-weather-delivery-hour') {
+				try {
+					const isAuthorized = true;
+
+					const { userId, newHour } = (await request.json()) as NewsDeliveryTimeUpdateReques;
+
+					if (userId === null || userId === '' || newHour === null) {
+						return new Response(JSON.stringify({ error: 'cannot have null props' }), {
+							status: 500,
+							headers: defaultHeaders,
+						});
+					}
+
+					if (isAuthorized) {
+						const updateWeatherDeliveryTimeSuccess = await updateWeatherDeliveryTime(env, userId, newHour);
+
+						if (updateWeatherDeliveryTimeSuccess instanceof Error) {
+							console.log('failed to update chat defaults');
+							return new Response(JSON.stringify({ success: false }), {
+								status: 500,
+								headers: defaultHeaders,
+							});
+						}
+
+						return new Response(JSON.stringify({ success: true }), {
+							status: 200,
+							headers: defaultHeaders,
+						});
+					}
+				} catch (error) {
+					return new Response(JSON.stringify({ error }), {
+						status: 500,
+						headers: defaultHeaders,
+					});
+				}
+			}
+			if (pathname === '/u/update-news-delivery-paused') {
+				try {
+					const isAuthorized = true;
+
+					const { userId, deliveryPaused } = (await request.json()) as DeliveryPausedUpdateRequest;
+
+					if (userId === null || userId === '' || deliveryPaused === null) {
+						return new Response(JSON.stringify({ error: 'cannot have null props' }), {
+							status: 500,
+							headers: defaultHeaders,
+						});
+					}
+
+					if (isAuthorized) {
+						const updateNewsDeliveryPausedSuccess = await updateNewsDeliveryPausedSetting(env, userId, deliveryPaused);
+
+						if (updateNewsDeliveryPausedSuccess instanceof Error) {
+							console.log('failed to update chat defaults');
+							return new Response(JSON.stringify({ success: false }), {
+								status: 500,
+								headers: defaultHeaders,
+							});
+						}
+
+						return new Response(JSON.stringify({ success: true }), {
+							status: 200,
+							headers: defaultHeaders,
+						});
+					}
+				} catch (error) {
+					return new Response(JSON.stringify({ error }), {
+						status: 500,
+						headers: defaultHeaders,
+					});
+				}
+			}
+			if (pathname === '/u/update-weather-delivery-paused') {
+				try {
+					const isAuthorized = true;
+
+					const { userId, deliveryPaused } = (await request.json()) as DeliveryPausedUpdateRequest;
+
+					if (userId === null || userId === '' || deliveryPaused === null) {
+						return new Response(JSON.stringify({ error: 'cannot have null props' }), {
+							status: 500,
+							headers: defaultHeaders,
+						});
+					}
+
+					if (isAuthorized) {
+						const updateWeatherDeliveryPausedSuccess = await updateWeatherDeliveryPausedSetting(env, userId, deliveryPaused);
+
+						if (updateWeatherDeliveryPausedSuccess instanceof Error) {
+							console.log('failed to update chat defaults');
+							return new Response(JSON.stringify({ success: false }), {
+								status: 500,
+								headers: defaultHeaders,
+							});
+						}
+
+						return new Response(JSON.stringify({ success: true }), {
+							status: 200,
+							headers: defaultHeaders,
+						});
+					}
+				} catch (error) {
+					return new Response(JSON.stringify({ error }), {
+						status: 500,
+						headers: defaultHeaders,
+					});
+				}
+			}
+		}
 	} catch (error) {
 		if (error instanceof Error) {
 			return error;
