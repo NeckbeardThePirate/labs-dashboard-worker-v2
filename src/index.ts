@@ -640,9 +640,9 @@ async function handleRequest(request: Request, env: ENV, ctx: ExecutionContext):
 				try {
 					const isAuthorized = true;
 
-					const { userId, newTimezone, newOffset, newDeliveryHour} = (await request.json()) as UpdateGenericRequest;
+					const { userId, newTimezone, newOffset, newDeliveryHour, newUtcDelivery} = (await request.json()) as UpdateGenericRequest;
 
-					if (userId === null || userId === '' || newTimezone === undefined || newOffset === undefined || newDeliveryHour === undefined) {
+					if (userId === null || userId === '' || newTimezone === undefined || newOffset === undefined || newDeliveryHour === undefined || newUtcDelivery === undefined) {
 						return new Response(JSON.stringify({ error: 'cannot have null props' }), {
 							status: 500,
 							headers: defaultHeaders,
@@ -650,7 +650,7 @@ async function handleRequest(request: Request, env: ENV, ctx: ExecutionContext):
 					}
 
 					if (isAuthorized) {
-						const realTempUpdateSuccess = await updateTimezone(env, userId, newTimezone, newOffset, newDeliveryHour);
+						const realTempUpdateSuccess = await updateTimezone(env, userId, newTimezone, newOffset, newDeliveryHour, newUtcDelivery);
 
 						if (realTempUpdateSuccess instanceof Error) {
 							console.log('failed to update chat defaults');

@@ -62,4 +62,5 @@ export interface UpdateGenericRequest {
 	newTimezone?: string;
 	newOffset?: number;
 	newDeliveryHour?: number;
+	newUtcDelivery?: number;
 }
