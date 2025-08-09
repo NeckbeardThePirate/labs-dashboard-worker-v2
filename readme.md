@@ -29,8 +29,10 @@ ALTER TABLE UserData ADD COLUMN weather_timezone TEXT DEFAULT 'est';
 news_delivery_hour weather_delivery_hour weather_zipcode news_topics time_format speed_format temp_format show_temp show_feels_like show_humidity show_weather show_wind weather_timezone chat_default_mode default_offset
 news_delivery_paused
 weather_delivery_paused
+news_delivery_utc
+weather_delivery_utc
 
 
-ALTER TABLE UserData ADD COLUMN chat_default_mode TEXT DEFAULT 'query';
-ALTER TABLE UserData ADD COLUMN default_offset INTEGER DEFAULT 0;
+ALTER TABLE UserData ADD COLUMN weather_delivery_utc INTEGER DEFAULT 0;
+ALTER TABLE UserData ADD COLUMN news_delivery_utc INTEGER DEFAULT 0;
 

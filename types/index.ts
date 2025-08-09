@@ -24,7 +24,42 @@ export interface DeliveryPausedUpdateRequest {
 	deliveryPaused: 'true' | 'false';
 }
 
+export interface ZipcodeUpdateRequest {
+	userId: string;
+	newZipCode: string;
+}
+
+export interface TimeFormatUpdateRequest {
+	userId: string;
+	newFormat: string;
+}
+
+export interface ShowRealTempUpdateRequest {
+	userId: string;
+	showRealTemp: string;
+}
+
+export interface ShowFeelsLikeTempUpdateRequest {
+	userId: string;
+	showFeelsLikeTemp: string;
+}
+
 export interface NewsDeliveryTimeUpdateReques {
 	userId: string;
 	newHour: number;
+}
+
+export interface ShowHumidityUpdateRequest {
+	userId: string;
+	showHumidity: 'true' | 'false';
+}
+
+export interface UpdateGenericRequest {
+	userId: string;
+	showHumidity?: 'true' | 'false';
+	showWeather?: 'true' | 'false';
+	showWind?: 'true' | 'false';
+	newTimezone?: string;
+	newOffset?: number;
+	newDeliveryHour?: number;
 }
